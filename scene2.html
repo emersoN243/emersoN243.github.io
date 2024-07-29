@@ -32,7 +32,7 @@
                 //Get only electric car data in descending order
                 var gasolineData = data.filter(function (d) { return d.Fuel === "Gasoline" });
                 gasolineData.sort(function (a, b) { return d3.descending(a.AverageHighwayMPG, b.AverageHighwayMPG); });
-                console.log(gasolineDataData);
+                console.log(gasolineData);
 
                 var gasolineGroupedData = d3.group(gasolineData, d => d.Make);
                 var meanGasolineData = Array.from(gasolineGroupedData, ([key, values]) => {
