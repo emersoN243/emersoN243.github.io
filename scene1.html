@@ -34,7 +34,7 @@
             var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
 
             var electricGroupedData = d3.group(electricData, d => d.Make);
-            var meanElectricData = Array.from(ElectricGroupedData, ([key, values]) => {
+            var meanElectricData = Array.from(electricGroupedData, ([key, values]) => {
                 var avgHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
                 return {key, avgHighwayMPG};
             });
