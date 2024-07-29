@@ -1,16 +1,120 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Scene 3</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-    </head>
-    <body>
-        <h1>Scene 3</h1>
-        <p>Scene 3 Content</p>
 
-        <button onclick="window.location.href='scene2.html'">Previous</button>
-        <button onclick="window.location.href='index.html'">Restart visualization</button>
+<head>
+    <title>Scene 3</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
 
-    </body>
+<body>
+    <h1>Scene 3</h1>
+    <p>Scene 3 Content</p>
+    <div id="my_dataviz"></div>
+
+    <button onclick="window.location.href='scene2.html'">Previous</button>
+    <button onclick="window.location.href='index.html'">Restart visualization</button>
+    <script>
+        // set the dimensions and margins of the graph
+        const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 650 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
+
+        // append the svg object to the body of the page
+        const svg = d3.select("#my_dataviz")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Parse the Data
+        d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
+
+            // List of subgroups = header of the csv files = soil condition here
+            var subgroups = Object.keys(data[0]).slice(3)
+            console.log(subgroups);
+
+            // List of groups = species here = value of the first column called group -> I show them on the X axis
+            var groups = d3.map(data, function(d){return(d.Make)}).keys();
+            console.log(groups);
+
+            //Get only electric car data in descending order
+            var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
+            var electricGroupedData = d3.group(electricData, d => d.Make);
+            var meanElectricData = Array.from(electricGroupedData, ([key, values]) => {
+                var avgHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
+                var avgCityMPG = d3.mean(values, d => d.AverageCityMPG);
+                return { key, avgHighwayMPG, avgCityMPG };
+            });
+            var mappedData = meanElectricData.map(function (d) {
+                return { key: d.key, value: [d.avgHighwayMPG, d.avgCityMPG]};
+            });
+
+            console.log(mappedData)
+            //mappedData.sort(function (a, b) { return d3.descending(a.value, b.value); });
+
+            // Add X axis
+            const x = d3.scaleBand()
+                .domain(mappedData.map(function (d) { return d.key }))
+                .range([0, width])
+                .padding([0.2])
+            svg.append("g")
+                .attr("transform", `translate(0, ${height})`)
+                .call(d3.axisBottom(x).tickSizeOuter(0))
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-65)");
+
+            // Add Y axis
+            const y = d3.scaleLinear()
+                .domain([0, 150])
+                .range([height, 0]);
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Another scale for subgroup position?
+             var xSubgroup = d3.scaleBand()
+            .domain(subgroups)
+            .range([0, x.bandwidth()])
+            .padding([0.05])
+
+            // color palette = one color per subgroup
+            var color = d3.scaleOrdinal()
+            .domain(subgroups)
+            .range(['#e41a1c','#377eb8'])
+
+            svg.append("g")
+                .selectAll("g")
+                .data(mappedData)
+                .enter()
+                .append("g")
+                .attr("transform", function(d) { return "translate(" + x(d.key) + ",0)"; })
+                .selectAll("rect")
+                .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
+                .enter().append("rect")
+                .attr("x", function (d) { return xSubgroup(d.key); })
+                .attr("y", function (d) { return y(d.value); })
+                .attr("width", xSubgroup.bandwidth())
+                .attr("height", function (d) { return height - y(d.value); })
+                .attr("fill", "steelblue")
+
+            svg.append("text")
+                .attr("transform",
+                    "translate(" + (width / 2) + " ," +
+                    (height + margin.top + 70) + ")")
+                .style("text-anchor", "middle")
+                .text("Car Make");
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Average Highway MPG");
+        });
+    </script>
+</body>
+
 </html>
