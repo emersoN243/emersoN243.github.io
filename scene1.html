@@ -35,7 +35,7 @@
         console.log(electricData);
 
         // List of subgroups = header of the csv files = Mileage
-        const subgroups = Object.keys(electricData[0]).slice(2);
+        const subgroups = Object.keys(electricData[0]).slice(3);
         console.log(subgroups);
 
         // List of groups = species here = value of the first column called Make -> I show them on the X axis
@@ -68,6 +68,8 @@
             .keys(subgroups)
             (electricData)
 
+        console.log(stackedData);
+        debugger;
         // Show the bars
         svg.append("g")
             .selectAll("g")
@@ -79,7 +81,7 @@
             // enter a second time = loop subgroup per subgroup to add all rectangles
             .data(d => d)
             .join("rect")
-                .attr("x", d => x(d.electricData.Make))
+                .attr("x", d => x(d.Make))
                 .attr("y", d => y(d[1]))
                 .attr("height", d => y(d[0]) - y(d[1]))
                 .attr("width",x.bandwidth())
