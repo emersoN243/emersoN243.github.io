@@ -46,6 +46,10 @@
 
                 console.log(meanGasolineData);
 
+                meanGasolineData.sort(function(x, y){
+                    return d3.descending(x.AverageHighwayMPG, y.AverageHighwayMPG);
+                });
+
                 // List of groups = species here = value of the first column called group -> I show them on the X axis
                 var groups = d3.map(meanGasolineData, function (d) { return (d.key) })
                 console.log(groups);

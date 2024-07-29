@@ -44,6 +44,10 @@
                 return { key, AverageHighwayMPG, AverageCityMPG };
             });
 
+            meanElectricData.sort(function(x, y){
+                return d3.descending(x.AverageHighwayMPG, y.AverageHighwayMPG);
+            });
+
             console.log(meanElectricData);
 
             // List of groups = species here = value of the first column called group -> I show them on the X axis
