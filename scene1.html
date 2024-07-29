@@ -68,7 +68,7 @@
                 .call(d3.axisLeft(y));
 
             svg.selectAll("mybar")
-                .data(electricData)
+                .data(mappedData)
                 .enter()
                 .append("rect")
                 .attr("x", function (d) { return x(d.key); })
