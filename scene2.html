@@ -68,10 +68,10 @@
                     .data(mappedData)
                     .enter()
                     .append("rect")
-                    .attr("x", function (d) { return x(d.Make); })
-                    .attr("y", function (d) { return y(d.AverageHighwayMPG); })
+                    .attr("x", function (d) { return x(d.key); })
+                    .attr("y", function (d) { return y(d.value); })
                     .attr("width", x.bandwidth())
-                    .attr("height", function (d) { return height - y(d.AverageHighwayMPG); })
+                    .attr("height", function (d) { return height - y(d.value); })
                     .attr("fill", "orange")
             })
     
