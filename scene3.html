@@ -10,6 +10,10 @@
 <body>
     <h1>Scene 3</h1>
     <p>Scene 3 Content</p>
+
+    <button class="electricButton">Electric</button>
+    <button class="gasButton">Gasoline</button>
+    
     <div id="my_dataviz"></div>
 
     <button onclick="window.location.href='scene2.html'">Previous</button>
@@ -26,33 +30,36 @@
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        
 
-        // Parse the Data
-        d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
+        //Function to update the chart on clicking button
+        function update(chartType) {
+            var chartDataFilter = chartType === "Electric" ? "Electricity" : "Gasoline";
+
+            // Parse the Data
+            d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
             // List of subgroups = header of the csv files = soil condition here
             var subgroups = Object.keys(data[0]).slice(3)
             console.log(subgroups);
 
             //Get only electric car data in descending order
-            var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
-            var electricGroupedData = d3.group(electricData, d => d.Make);
-            var meanElectricData = Array.from(electricGroupedData, ([key, values]) => {
+            var carData = data.filter(function (d) { return d.Fuel === chartDataFilter });
+            var carGroupedData = d3.group(carData, d => d.Make);
+            var meanCarData = Array.from(carGroupedData, ([key, values]) => {
                 var AverageHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
                 var AverageCityMPG = d3.mean(values, d => d.AverageCityMPG);
                 return { key, AverageHighwayMPG, AverageCityMPG };
             });
 
-            console.log(meanElectricData);           
+            console.log(meanCarData);           
 
             // List of groups = species here = value of the first column called group -> I show them on the X axis
-            var groups = d3.map(meanElectricData, function(d){return(d.key)})
+            var groups = d3.map(meanCarData, function(d){return(d.key)})
             console.log(groups);
 
 
-            console.log(subgroups.map(function(key) { return {key: key, value: meanElectricData[key]}; }));
-            
+            console.log(subgroups.map(function(key) { return {key: key, value: meanCarData[key]}; }));
+
             // Add X axis
             const x = d3.scaleBand()
                 .domain(groups)
@@ -75,7 +82,7 @@
                 .call(d3.axisLeft(y));
 
             // Another scale for subgroup position?
-             var xSubgroup = d3.scaleBand()
+            var xSubgroup = d3.scaleBand()
             .domain(subgroups)
             .range([0, x.bandwidth()])
             .padding([0.05])
@@ -87,7 +94,7 @@
 
             svg.append("g")
                 .selectAll("g")
-                .data(meanElectricData)
+                .data(meanCarData)
                 .enter()
                 .append("g")
                 .attr("transform", function(d) { return "translate(" + x(d.key) + ",0)"; })
@@ -105,7 +112,7 @@
                     "translate(" + (width / 2) + " ," +
                     (height + margin.top + 100) + ")")
                 .style("text-anchor", "middle")
-                .text("Car Make");
+                .text( chartType + "Car Make");
 
             svg.append("text")
                 .attr("transform", "rotate(-90)")
@@ -114,7 +121,20 @@
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text("Average MPG");
+            });
+
+        }
+
+        d3.select("#electricButton").on("click", function() {
+            update("Electric");
         });
+
+        d3.select("#gasButton").on("click", function() {
+            update("Gas");
+        });
+
+        update("Electric");
+        
     </script>
 </body>
 
