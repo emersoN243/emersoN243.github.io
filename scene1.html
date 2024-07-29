@@ -5,12 +5,6 @@
     <title>Scene 1</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        rect {
-            fill: lightblue;
-            stroke: black;
-        }
-    </style>
 </head>
 
 <body>
@@ -22,10 +16,8 @@
     <button onclick="window.location.href='scene2.html'">Next</button>
     <script>
 
-                // set the dimensions and margins of the graph
-        const margin = {top: 10, right: 30, bottom: 20, left: 50},
-            width = 460 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+        // set the dimensions and margins of the graph
+        const margin = {top: 10, right: 30, bottom: 20, left: 50}, width = 460 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         const svg = d3.select("#my_dataviz")
