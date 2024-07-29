@@ -17,7 +17,7 @@
     <script>
 
         // set the dimensions and margins of the graph
-        const margin = {top: 10, right: 30, bottom: 20, left: 50}, width = 550 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
+        const margin = {top: 10, right: 30, bottom: 20, left: 50}, width = 650 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         const svg = d3.select("#my_dataviz")
@@ -30,17 +30,12 @@
         // Parse the Data
         d3.csv("https://flunky.github.io/cars2017.csv").then( function(data) {
         
-        //Get only electric car data
+        //Get only electric car data in descending order
         var electricData = data.filter(function(d){return d.Fuel === "Electricity"});
+        electricData.sort(function(a,b){return d3.descending(a.AverageHighwayMPG, b.AverageHighwayMPG);
+
+        })
         console.log(electricData);
-
-        // List of subgroups = header of the csv files = Mileage
-        //const subgroups = Object.keys(electricData[0]).slice(3);
-        //console.log(subgroups);
-
-        // List of groups = species here = value of the first column called Make -> I show them on the X axis
-        //const groups = electricData.map(d => (d.Make))
-        //console.log(groups);
 
         // Add X axis
         const x = d3.scaleBand()
@@ -57,33 +52,6 @@
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
-
-        // // color palette = one color per subgroup
-        // const color = d3.scaleOrdinal()
-        //     .domain(subgroups)
-        //     .range(['#e41a1c','#377eb8'])
-
-        // //stack the data? --> stack per subgroup
-        // const stackedData = d3.stack()
-        //     .keys(subgroups)
-        //     (electricData)
-
-        //console.log(stackedData);
-        // Show the bars
-        // svg.append("g")
-        //     .selectAll("g")
-        //     // Enter in the stack data = loop key per key = group per group
-        //     .data(stackedData)
-        //     .join("g")
-        //     .attr("fill", d => color(d.key))
-        //     .selectAll("rect")
-        //     // enter a second time = loop subgroup per subgroup to add all rectangles
-        //     .data(d => d)
-        //     .join("rect")
-        //         .attr("x", d => x(d.Make))
-        //         .attr("y", d => y(d[1]))
-        //         .attr("height", d => y(d[0]) - y(d[1]))
-        //         .attr("width",x.bandwidth())
 
         svg.selectAll("mybar")
         .data(electricData)
