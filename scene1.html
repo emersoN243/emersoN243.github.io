@@ -145,8 +145,7 @@
             // Add annotation to the chart
             const makeAnnotations = d3.annotation()
             .annotations(annotations)
-            d3.select("#example1")
-            .append("g")
+            svg.append("g")
             .call(makeAnnotations)
             
         });
