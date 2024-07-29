@@ -33,9 +33,7 @@
             var subgroups = Object.keys(data[0]).slice(3)
             console.log(subgroups);
 
-            // List of groups = species here = value of the first column called group -> I show them on the X axis
-            var groups = d3.map(data, function(d){return(d.Make)}).keys();
-            console.log(groups);
+            
 
             //Get only electric car data in descending order
             var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
@@ -45,6 +43,8 @@
                 var avgCityMPG = d3.mean(values, d => d.AverageCityMPG);
                 return { key, avgHighwayMPG, avgCityMPG };
             });
+            
+
             var mappedData = meanElectricData.map(function (d) {
                 return { key: d.key, value: [d.avgHighwayMPG, d.avgCityMPG]};
             });
@@ -52,6 +52,8 @@
             console.log(mappedData)
             //mappedData.sort(function (a, b) { return d3.descending(a.value, b.value); });
 
+            console.log(subgroups.map(function(key) { return {key: key, value: mappedData[key]}; }));
+            
             // Add X axis
             const x = d3.scaleBand()
                 .domain(mappedData.map(function (d) { return d.key }))
@@ -97,7 +99,7 @@
                 .attr("y", function (d) { return y(d.value); })
                 .attr("width", xSubgroup.bandwidth())
                 .attr("height", function (d) { return height - y(d.value); })
-                .attr("fill", "steelblue")
+                .attr("fill", function(d) { return color(d.key); });
 
             svg.append("text")
                 .attr("transform",
