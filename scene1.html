@@ -32,7 +32,7 @@
         d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
             // List of subgroups = header of the csv files = soil condition here
-            var subgroups = Object.keys(data[0]).slice(3)
+            var subgroups = Object.keys(data[0]).slice(3);
             console.log(subgroups);
 
             //Get only electric car data in descending order
@@ -103,7 +103,7 @@
             svg.append("text")
                 .attr("transform",
                     "translate(" + (width / 2) + " ," +
-                    (height + margin.top + 90) + ")")
+                    (height + margin.top + 100) + ")")
                 .style("text-anchor", "middle")
                 .text("Electric Car Make");
 
