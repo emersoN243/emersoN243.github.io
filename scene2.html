@@ -40,7 +40,7 @@
                 });
 
                 // List of groups = species here = value of the first column called group -> I show them on the X axis
-                var groups = d3.map(mappedData, function (d) { return (d.key) })
+                var groups = d3.map(meanGasolineData, function (d) { return (d.key) })
 
                 var mappedData = meanGasolineData.map(function(d) {
                 return {key: d.key, value: d.avgHighwayMPG};
