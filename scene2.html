@@ -69,7 +69,7 @@
 
                 // Add Y axis
                 const y = d3.scaleLinear()
-                    .domain([0, 150])
+                    .domain([0, 50])
                     .range([height, 0]);
                 svg.append("g")
                     .call(d3.axisLeft(y));
@@ -116,83 +116,6 @@
                     .text("Average MPG");
             });
 
-            // // set the dimensions and margins of the graph
-            // const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 650 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
-    
-            // // append the svg object to the body of the page
-            // const svg = d3.select("#my_dataviz")
-            //     .append("svg")
-            //     .attr("width", width + margin.left + margin.right)
-            //     .attr("height", height + margin.top + margin.bottom)
-            //     .append("g")
-            //     .attr("transform", `translate(${margin.left},${margin.top})`);
-    
-            // // Parse the Data
-            // d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
-    
-            //     //Get only gasoline car data in descending order
-            //     var gasolineData = data.filter(function (d) { return d.Fuel === "Gasoline" });
-
-            //     var gasolineGroupedData = d3.group(gasolineData, d => d.Make);
-            //     var meanGasolineData = Array.from(gasolineGroupedData, ([key, values]) => {
-            //         var avgHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
-            //         return {key, avgHighwayMPG};
-            //     });
-
-
-            //     var mappedData = meanGasolineData.map(function(d) {
-            //     return {key: d.key, value: d.avgHighwayMPG};
-            //     });
-
-            //     mappedData.sort(function(a, b) { return d3.descending(a.value, b.value); });
-                
-    
-            //     // Add X axis
-            //     const x = d3.scaleBand()
-            //         .domain(mappedData.map(function (d) { return d.key }))
-            //         .range([0, width])
-            //         .padding([0.2])
-            //     svg.append("g")
-            //         .attr("transform", `translate(0, ${height})`)
-            //         .call(d3.axisBottom(x).tickSizeOuter(0))
-            //         .selectAll("text")  
-            //         .style("text-anchor", "end")
-            //         .attr("dx", "-.8em")
-            //         .attr("dy", ".15em")
-            //         .attr("transform", "rotate(-65)");
-    
-            //     // Add Y axis
-            //     const y = d3.scaleLinear()
-            //         .domain([0, 150])
-            //         .range([height, 0]);
-            //     svg.append("g")
-            //         .call(d3.axisLeft(y));
-    
-            //     svg.selectAll("mybar")
-            //         .data(mappedData)
-            //         .enter()
-            //         .append("rect")
-            //         .attr("x", function (d) { return x(d.key); })
-            //         .attr("y", function (d) { return y(d.value); })
-            //         .attr("width", x.bandwidth())
-            //         .attr("height", function (d) { return height - y(d.value); })
-            //         .attr("fill", "orange");
-
-            //     svg.append("text")             
-            //         .attr("transform",
-            //         "translate(" + (width/2) + " ," + 
-            //                (height + margin.top + 70) + ")")
-            //         .style("text-anchor", "middle")
-            //         .text("Car Make");
-                
-            //     svg.append("text")
-            //         .attr("transform", "rotate(-90)")
-            //         .attr("y", 0 - margin.left)
-            //         .attr("x",0 - (height / 2))
-            //         .attr("dy", "1em")
-            //         .style("text-anchor", "middle")
-            //         .text("Average Highway MPG"); 
-            // })
     
         </script>
     </body>
