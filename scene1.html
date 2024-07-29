@@ -35,16 +35,16 @@
         console.log(electricData);
 
         // List of subgroups = header of the csv files = Mileage
-        const subgroups = Object.keys(electricData[0]).slice(3);
-        console.log(subgroups);
+        //const subgroups = Object.keys(electricData[0]).slice(3);
+        //console.log(subgroups);
 
         // List of groups = species here = value of the first column called Make -> I show them on the X axis
-        const groups = electricData.map(d => (d.Make))
-        console.log(groups);
+        //const groups = electricData.map(d => (d.Make))
+        //console.log(groups);
 
         // Add X axis
         const x = d3.scaleBand()
-            .domain(groups)
+            .domain(electricData.map(function(d){return d.Make}))
             .range([0, width])
             .padding([0.2])
         svg.append("g")
@@ -68,23 +68,32 @@
             .keys(subgroups)
             (electricData)
 
-        console.log(stackedData);
-        debugger;
+        //console.log(stackedData);
         // Show the bars
-        svg.append("g")
-            .selectAll("g")
-            // Enter in the stack data = loop key per key = group per group
-            .data(stackedData)
-            .join("g")
-            .attr("fill", d => color(d.key))
-            .selectAll("rect")
-            // enter a second time = loop subgroup per subgroup to add all rectangles
-            .data(d => d)
-            .join("rect")
-                .attr("x", d => x(d.Make))
-                .attr("y", d => y(d[1]))
-                .attr("height", d => y(d[0]) - y(d[1]))
-                .attr("width",x.bandwidth())
+        // svg.append("g")
+        //     .selectAll("g")
+        //     // Enter in the stack data = loop key per key = group per group
+        //     .data(stackedData)
+        //     .join("g")
+        //     .attr("fill", d => color(d.key))
+        //     .selectAll("rect")
+        //     // enter a second time = loop subgroup per subgroup to add all rectangles
+        //     .data(d => d)
+        //     .join("rect")
+        //         .attr("x", d => x(d.Make))
+        //         .attr("y", d => y(d[1]))
+        //         .attr("height", d => y(d[0]) - y(d[1]))
+        //         .attr("width",x.bandwidth())
+
+        svg.selectAll("mybar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", function(d) { return x(d.Make); })
+        .attr("y", function(d) { return y(d.AverageHighwayMPG); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height - y(d.AverageHighwayMPG); })
+        .attr("fill", "#69b3a2")
         })
 
     </script>
