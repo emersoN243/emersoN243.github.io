@@ -26,65 +26,7 @@
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        //d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_stacked.csv").then(function(data) {
-
-        //     // List of subgroups = header of the csv files = soil condition here
-        //     var subgroups = data.columns.slice(1)
-        //     console.log(subgroups);
-
-        //     // List of groups = species here = value of the first column called group -> I show them on the X axis
-        //     var groups = d3.map(data, function(d){return(d.group)}).keys()
-        //     console.log(groups);
-
-        //     var subgroupsMap = subgroups.map(function(key) { return {key: key, value: data[key]}; });
-        //     console.log(subgroupsMap);
-
-        //     // Add X axis
-        //     var x = d3.scaleBand()
-        //         .domain(groups)
-        //         .range([0, width])
-        //         .padding([0.2])
-        //     svg.append("g")
-        //     .attr("transform", "translate(0," + height + ")")
-        //     .call(d3.axisBottom(x).tickSize(0));
-
-        //     // Add Y axis
-        //     var y = d3.scaleLinear()
-        //     .domain([0, 40])
-        //     .range([ height, 0 ]);
-        //     svg.append("g")
-        //     .call(d3.axisLeft(y));
-
-        //     // Another scale for subgroup position?
-        //     var xSubgroup = d3.scaleBand()
-        //     .domain(subgroups)
-        //     .range([0, x.bandwidth()])
-        //     .padding([0.05])
-
-        //     // color palette = one color per subgroup
-        //     var color = d3.scaleOrdinal()
-        //     .domain(subgroups)
-        //     .range(['#e41a1c','#377eb8','#4daf4a'])
-
-        //     // Show the bars
-        //     svg.append("g")
-        //     .selectAll("g")
-        //     // Enter in data = loop group per group
-        //     .data(data)
-        //     .enter()
-        //     .append("g")
-        //         .attr("transform", function(d) { return "translate(" + x(d.group) + ",0)"; })
-        //     .selectAll("rect")
-        //     .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
-        //     .enter().append("rect")
-        //         .attr("x", function(d) { return xSubgroup(d.key); })
-        //         .attr("y", function(d) { return y(d.value); })
-        //         .attr("width", xSubgroup.bandwidth())
-        //         .attr("height", function(d) { return height - y(d.value); })
-        //         .attr("fill", function(d) { return color(d.key); });
-
-        // });
-
+        
 
         // Parse the Data
         d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
@@ -92,8 +34,6 @@
             // List of subgroups = header of the csv files = soil condition here
             var subgroups = Object.keys(data[0]).slice(3)
             console.log(subgroups);
-
-            
 
             //Get only electric car data in descending order
             var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
@@ -104,15 +44,7 @@
                 return { key, AverageHighwayMPG, AverageCityMPG };
             });
 
-            console.log(meanElectricData); // avgHighwayMPG, avgCityMPG
-            
-
-            var mappedData = meanElectricData.map(function (d) {
-                return { key: d.key, value: [d.AverageHighwayMPG, d.AverageCityMPG]};
-            });
-
-            console.log(mappedData)
-            //mappedData.sort(function (a, b) { return d3.descending(a.value, b.value); });
+            console.log(meanElectricData);           
 
             // List of groups = species here = value of the first column called group -> I show them on the X axis
             var groups = d3.map(mappedData, function(d){return(d.key)})
@@ -151,7 +83,7 @@
             // color palette = one color per subgroup
             var color = d3.scaleOrdinal()
             .domain(subgroups)
-            .range(['#e41a1c','#377eb8'])
+            .range(['orange','steelblue'])
 
             svg.append("g")
                 .selectAll("g")
@@ -181,7 +113,7 @@
                 .attr("x", 0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text("Average Highway MPG");
+                .text("Average MPG");
         });
     </script>
 </body>

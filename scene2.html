@@ -34,21 +34,24 @@
 
                 var gasolineGroupedData = d3.group(gasolineData, d => d.Make);
                 var meanGasolineData = Array.from(gasolineGroupedData, ([key, values]) => {
-                    var avgHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
-                    return {key, avgHighwayMPG};
+                    var AverageHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
+                    var AverageCityMPG = d3.mean(values, d => d.AverageCityMPG);
+                    return { key, AverageHighwayMPG, AverageCityMPG };
                 });
 
+                // List of groups = species here = value of the first column called group -> I show them on the X axis
+                var groups = d3.map(mappedData, function (d) { return (d.key) })
 
                 var mappedData = meanGasolineData.map(function(d) {
                 return {key: d.key, value: d.avgHighwayMPG};
                 });
 
-                mappedData.sort(function(a, b) { return d3.descending(a.value, b.value); });
+                meanGasolineData.sort(function(a, b) { return d3.descending(a.AverageHighwayMPG, b.AverageHighwayMPG); });
                 
     
                 // Add X axis
                 const x = d3.scaleBand()
-                    .domain(mappedData.map(function (d) { return d.key }))
+                    .domain(groups)
                     .range([0, width])
                     .padding([0.2])
                 svg.append("g")
@@ -68,7 +71,7 @@
                     .call(d3.axisLeft(y));
     
                 svg.selectAll("mybar")
-                    .data(mappedData)
+                    .data(meanGasolineData)
                     .enter()
                     .append("rect")
                     .attr("x", function (d) { return x(d.key); })
@@ -82,7 +85,7 @@
                     "translate(" + (width/2) + " ," + 
                            (height + margin.top + 70) + ")")
                     .style("text-anchor", "middle")
-                    .text("Car Make");
+                    .text("Gasoline Car Make");
                 
                 svg.append("text")
                     .attr("transform", "rotate(-90)")
@@ -90,7 +93,7 @@
                     .attr("x",0 - (height / 2))
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
-                    .text("Average Highway MPG"); 
+                    .text("Average MPG"); 
             })
     
         </script>
