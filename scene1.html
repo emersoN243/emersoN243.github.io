@@ -35,7 +35,7 @@
         console.log(electricData);
 
         // List of subgroups = header of the csv files = Mileage
-        const subgroups = electricData.columns.slice(2)
+        const subgroups = Object.keys(electricData[0]).slice(2);
         console.log(subgroups);
 
         // List of groups = species here = value of the first column called Make -> I show them on the X axis
