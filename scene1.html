@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Scene 1</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <h1>Scene 1</h1>
-        <p>Scene 1 Content</p>
 
-        <h5>Click Next to go to Scene 2</h5>
+<head>
+    <title>Scene 1</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        rect {
+            fill: lightblue;
+            stroke: black;
+        }
+    </style>
+</head>
 
-        <button onclick="window.location.href='index.html'">Previous</button>
-        <button onclick="window.location.href='scene2.html'">Next</button>
+<body>
+    <h1>Scene 1</h1>
+    <p>Scene 1 Content</p>
+    <svg class="chart1"></svg>
+    <h5>Click Next to go to Scene 2</h5>
+    <button onclick="window.location.href='index.html'">Previous</button>
+    <button onclick="window.location.href='scene2.html'">Next</button>
+    <script>
 
-    </body>
+        const DATA_URL = "https://flunky.github.io/cars2017.csv";
+        const width = 800 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+        const margin = { left: 50, right: 0, bottom: 50, top: 50 }
+        var chart1 = d3.select('#chart1').attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
+
+        d3.csv(DATA_URL, function(data) {
+            //Get only data for Electric vehicles
+            var electricData = data.filter((d) => d.Fuel === "Electricity");
+            var subgroups = electricData.columns.slice(1);
+
+            var groups = d3.map(electricData, function(d) {return (d.Make)}).keys();
+            
+            // Add X axis
+            var x = d3.scaleBand().domain(groups).range([0, width]).padding(0.1);
+            chart1.append("g").attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+            
+            var y = d3.scaleLinear().domain(0, 200).range([height, 0]);
+            chart1.append("g").call(d3.axisLeft(y));
+
+            var color = d3.scaleOrdinal().domain(cars).range(['#e41a1c','#377eb8',]);
+
+            //stack the data by highway or city mileage
+            var stackedData = d3.stack().keys(subgroups)(electricData)
+
+            chart1.append("g")
+            .selectAll("g")
+            // Enter in the stack data = loop key per key = group per group
+            .data(stackedData)
+            .enter().append("g")
+            .attr("fill", function(d) { return color(d.key); })
+            .selectAll("rect")
+            // enter a second time = loop subgroup per subgroup to add all rectangles
+            .data(function(d) { return d; })
+            .enter().append("rect")
+                .attr("x", function(d) { return x(d.electricData.Make); })
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("width",x.bandwidth())
+        })
+    </script>
+
+</body>
+
 </html>
