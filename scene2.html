@@ -50,7 +50,7 @@
     
                 // Add X axis
                 const x = d3.scaleBand()
-                    .domain(mappedData.map(function (d) { return d.Make }))
+                    .domain(mappedData.map(function (d) { return d.key }))
                     .range([0, width])
                     .padding([0.2])
                 svg.append("g")
