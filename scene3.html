@@ -99,16 +99,16 @@
             var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
             var electricGroupedData = d3.group(electricData, d => d.Make);
             var meanElectricData = Array.from(electricGroupedData, ([key, values]) => {
-                var avgHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
-                var avgCityMPG = d3.mean(values, d => d.AverageCityMPG);
-                return { key, avgHighwayMPG, avgCityMPG };
+                var AverageHighwayMPG = d3.mean(values, d => d.AverageHighwayMPG);
+                var AverageCityMPG = d3.mean(values, d => d.AverageCityMPG);
+                return { key, AverageHighwayMPG, AverageCityMPG };
             });
 
-            console.log(meanElectricData);
+            console.log(meanElectricData); // avgHighwayMPG, avgCityMPG
             
 
             var mappedData = meanElectricData.map(function (d) {
-                return { key: d.key, value: [d.avgHighwayMPG, d.avgCityMPG]};
+                return { key: d.key, value: [d.AverageHighwayMPG, d.AverageCityMPG]};
             });
 
             console.log(mappedData)
