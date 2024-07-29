@@ -86,7 +86,7 @@
         //         .attr("width",x.bandwidth())
 
         svg.selectAll("mybar")
-        .data(data)
+        .data(electricData)
         .enter()
         .append("rect")
         .attr("x", function(d) { return x(d.Make); })
