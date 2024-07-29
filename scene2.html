@@ -46,7 +46,7 @@
                 return {key: d.key, value: d.avgHighwayMPG};
                 });
 
-                meanGasolineData.sort(function(a, b) { return d3.descending(a.AverageHighwayMPG, b.AverageHighwayMPG); });
+                //meanGasolineData.sort(function(a, b) { return d3.descending(a.AverageHighwayMPG, b.AverageHighwayMPG); });
                 
     
                 // Add X axis
@@ -83,7 +83,7 @@
                 svg.append("text")             
                     .attr("transform",
                     "translate(" + (width/2) + " ," + 
-                           (height + margin.top + 70) + ")")
+                           (height + margin.top + 90) + ")")
                     .style("text-anchor", "middle")
                     .text("Gasoline Car Make");
                 
