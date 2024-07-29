@@ -55,7 +55,12 @@
                     .padding([0.2])
                 svg.append("g")
                     .attr("transform", `translate(0, ${height})`)
-                    .call(d3.axisBottom(x).tickSizeOuter(0));
+                    .call(d3.axisBottom(x).tickSizeOuter(0))
+                    .selectAll("text")  
+                    .style("text-anchor", "end")
+                    .attr("dx", "-.8em")
+                    .attr("dy", ".15em")
+                    .attr("transform", "rotate(-65)");
     
                 // Add Y axis
                 const y = d3.scaleLinear()
