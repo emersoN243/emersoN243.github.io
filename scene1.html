@@ -115,24 +115,26 @@
                 .style("text-anchor", "middle")
                 .text("Average MPG");
 
+            //Legend
+            var legendKeys = ["Highway", "City"];
             // Add one dot in the legend for each name.
             var size = 20
             svg.selectAll("mydots")
-            .data(keys)
+            .data(legendKeys)
             .enter()
             .append("rect")
-                .attr("x", 500)
+                .attr("x", width-100)
                 .attr("y", function(d,i){ return 100 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
                 .attr("width", size)
                 .attr("height", size)
                 .style("fill", function(d){ return color(d.key)})
 
             // Add one dot in the legend for each name.
-            SVG.selectAll("mylabels")
-            .data(keys)
+            svg.selectAll("mylabels")
+            .data(legendKeys)
             .enter()
             .append("text")
-                .attr("x", 500 + size*1.2)
+                .attr("x", width - 100 + size*1.2)
                 .attr("y", function(d,i){ return 100 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
                 .style("fill", function(d){ return color(d.key)})
                 .text(function(d){ return d})
