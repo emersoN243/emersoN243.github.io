@@ -115,7 +115,7 @@
             //mappedData.sort(function (a, b) { return d3.descending(a.value, b.value); });
 
             // List of groups = species here = value of the first column called group -> I show them on the X axis
-            var groups = d3.map(mappedData, function(d){return(d.key)}).keys()
+            var groups = d3.map(mappedData, function(d){return(d.key)})
             console.log(groups);
 
 
@@ -155,7 +155,7 @@
 
             svg.append("g")
                 .selectAll("g")
-                .data(mappedData)
+                .data(meanElectricData)
                 .enter()
                 .append("g")
                 .attr("transform", function(d) { return "translate(" + x(d.key) + ",0)"; })
