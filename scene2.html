@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Scene 2</title>
+        <title>Gasoline Car Fuel Efficiency</title>
         <link rel="stylesheet" href="style.css">
         <script src="https://d3js.org/d3.v7.min.js"></script>
     </head>
     <body>
-        <h1>Scene 2</h1>
+        <h1>Gasoline Car Fuel Efficiency</h1>
         <p>Scene 2 Content</p>
-        <div id="my_dataviz"></div>
-        <h5>Click Next to go to Scene 3</h5>
+        <div id="scene2"></div>
 
         <button onclick="window.location.href='scene1.html'">Previous</button>
         <button onclick="window.location.href='scene3.html'">Next</button>
         <script>
-
-            // set the dimensions and margins of the graph
-            const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 1000 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
-
-            // append the svg object to the body of the page
-            const svg = d3.select("#my_dataviz")
+            const margin = { top: 10, right: 30, bottom: 110, left: 50 },
+                  width = 1000 - margin.left - margin.right, 
+                  height = 500 - margin.top - margin.bottom;
+            //Add canvas to page
+            const svg = d3.select("#scene2")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -28,14 +26,14 @@
 
 
 
-            // Parse the Data
+            //Get the Data
             d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
-                // List of subgroups = header of the csv files = soil condition here
+                //Get the subgroups, AvgHighwayMPG and AvgCityMPG
                 var subgroups = Object.keys(data[0]).slice(3);
                 console.log(subgroups);
 
-                //Get only electric car data in descending order
+                //Get Gasoline car data in descending order
                 var gasolineData = data.filter(function (d) { return d.Fuel === "Gasoline" });
                 var gasolineGroupedData = d3.group(gasolineData, d => d.Make);
                 var meanGasolineData = Array.from(gasolineGroupedData, ([key, values]) => {
@@ -46,18 +44,17 @@
 
                 console.log(meanGasolineData);
 
+                //Sort data in descending order of AvgHighwayMPG
                 meanGasolineData.sort(function(x, y){
                     return d3.descending(x.AverageHighwayMPG, y.AverageHighwayMPG);
                 });
 
-                // List of groups = species here = value of the first column called group -> I show them on the X axis
+                // List of groups, Gasoline Car Make
                 var groups = d3.map(meanGasolineData, function (d) { return (d.key) })
                 console.log(groups);
-
-
                 console.log(subgroups.map(function (key) { return { key: key, value: meanGasolineData[key] }; }));
 
-                // Add X axis
+                //Add X axis
                 const x = d3.scaleBand()
                     .domain(groups)
                     .range([0, width])
@@ -71,24 +68,25 @@
                     .attr("dy", ".15em")
                     .attr("transform", "rotate(-65)");
 
-                // Add Y axis
+                //Add Y axis
                 const y = d3.scaleLinear()
                     .domain([0, 45])
                     .range([height, 0]);
                 svg.append("g")
                     .call(d3.axisLeft(y));
 
-                // Another scale for subgroup position?
+                // Add scale for subgroups
                 var xSubgroup = d3.scaleBand()
                     .domain(subgroups)
                     .range([0, x.bandwidth()])
                     .padding([0.05])
 
-                // color palette = one color per subgroup
+                //Orange for Highway, Blue for City
                 var color = d3.scaleOrdinal()
                     .domain(subgroups)
                     .range(['orange', 'steelblue'])
 
+                //Add bars to chart
                 svg.append("g")
                     .selectAll("g")
                     .data(meanGasolineData)
@@ -104,6 +102,7 @@
                     .attr("height", function (d) { return height - y(d.value); })
                     .attr("fill", function (d) { return color(d.key); });
 
+                //Add X axis label
                 svg.append("text")
                     .attr("transform",
                         "translate(" + (width / 2) + " ," +
@@ -111,6 +110,7 @@
                     .style("text-anchor", "middle")
                     .text("Gas Car Make");
 
+                //Add Y axis label
                 svg.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", 0 - margin.left)

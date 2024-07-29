@@ -2,40 +2,40 @@
 <html>
 
 <head>
-    <title>Scene 1</title>
+    <title>Electric Car Fuel Efficiency</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
-    <h1>Scene 1</h1>
+    <h1>Electric Car Fuel Efficiency</h1>
     <p>Scene 1 Content</p>
-    <div id="my_dataviz"></div>
-    <h5>Click Next to go to Scene 2</h5>
+    <div id="scene1"></div>
     <button onclick="window.location.href='index.html'">Previous</button>
     <button onclick="window.location.href='scene2.html'">Next</button>
     <script>
-        // set the dimensions and margins of the graph
-        const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 1000 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
-
-        // append the svg object to the body of the page
-        const svg = d3.select("#my_dataviz")
+        
+        const margin = { top: 10, right: 30, bottom: 110, left: 50 }, 
+              width = 1000 - margin.left - margin.right,
+              height = 500 - margin.top - margin.bottom;
+        
+        //Add canvas to page
+        const svg = d3.select("#scene1")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-
-
-        // Parse the Data
+        //Get the data
         d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
-            // List of subgroups = header of the csv files = soil condition here
+            // Get the subgroups, AvgHighwayMPG and AvgCityMPG
             var subgroups = Object.keys(data[0]).slice(3);
             console.log(subgroups);
 
-            //Get only electric car data in descending order
+            //Get Electric car data in descending order
             var electricData = data.filter(function (d) { return d.Fuel === "Electricity" });
             var electricGroupedData = d3.group(electricData, d => d.Make);
             var meanElectricData = Array.from(electricGroupedData, ([key, values]) => {
@@ -44,17 +44,16 @@
                 return { key, AverageHighwayMPG, AverageCityMPG };
             });
 
+            //Sort data in descending order of AvgHighwayMPG
             meanElectricData.sort(function(x, y){
                 return d3.descending(x.AverageHighwayMPG, y.AverageHighwayMPG);
             });
 
             console.log(meanElectricData);
 
-            // List of groups = species here = value of the first column called group -> I show them on the X axis
+            //Get the groups, Car Make
             var groups = d3.map(meanElectricData, function (d) { return (d.key) })
             console.log(groups);
-
-
             console.log(subgroups.map(function (key) { return { key: key, value: meanElectricData[key] }; }));
 
             // Add X axis
@@ -73,22 +72,23 @@
 
             // Add Y axis
             const y = d3.scaleLinear()
-                .domain([0, 150])
+                .domain([0, 160])
                 .range([height, 0]);
             svg.append("g")
                 .call(d3.axisLeft(y));
 
-            // Another scale for subgroup position?
+            //Scale for subgroups position
             var xSubgroup = d3.scaleBand()
                 .domain(subgroups)
                 .range([0, x.bandwidth()])
                 .padding([0.05])
 
-            // color palette = one color per subgroup
+            //Orange for Highway, Blue for City
             var color = d3.scaleOrdinal()
                 .domain(subgroups)
                 .range(['orange', 'steelblue'])
 
+            //Add bars to canvas
             svg.append("g")
                 .selectAll("g")
                 .data(meanElectricData)
@@ -104,6 +104,7 @@
                 .attr("height", function (d) { return height - y(d.value); })
                 .attr("fill", function (d) { return color(d.key); });
 
+            // Add X axis label
             svg.append("text")
                 .attr("transform",
                     "translate(" + (width / 2) + " ," +
@@ -111,21 +112,25 @@
                 .style("text-anchor", "middle")
                 .text("Electric Car Make");
 
+            //Add Y axis label
             svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x", 0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text("Average MPG");
+                .text("Average Miles Per Gallon");
 
             //Legend
-            svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange")
-            svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue")
-            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle")
-            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle")
+            svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange");
+            svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
+            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
+            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
+   
             
         });
+
+        
     </script>
 
 </body>
