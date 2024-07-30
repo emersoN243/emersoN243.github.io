@@ -129,10 +129,10 @@
                     .on("mouseover", function(event, d){
                         tooltip.transition()
                             .duration(200)
-                            .style('opacity', 0.9)
+                            .style('opacity', 0.9);
                         tooltip.html(tooltipLabel(d.key) + d.value)
-                                .style("left", (event.pageX)+ "px")
-                                .style("top", (event.pageY - 28) + "px")
+                               .style("left", (event.pageX)+ "px")
+                               .style("top", (event.pageY - 28) + "px");
                     })
                     .on("mouseout", function(event, d){
                         tooltip.transition()
