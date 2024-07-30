@@ -107,6 +107,10 @@
                 .domain(subgroups)
                 .range(['orange','steelblue'])
 
+                var tooltipLabel = function(d) {
+                    return d === "AvgHighwayMPG" ? "Average Highway MPG: " : "Average City MPG: ";
+                }
+
 
                 svg.append("g")
                     .selectAll("g")
@@ -126,7 +130,7 @@
                         tooltip.transition()
                             .duration(200)
                             .style('opacity', 0.9)
-                        tooltip.html("Car Make: " + d.key + "<br/>Highway MPG: " + d.value)
+                        tooltip.html("Car Make: " + xSubgroup(d.key) + "<br/>" + tooltipLabel(d.key) + d.value)
                                 .style("left", (event.pageX)+ "px")
                                 .style("top", (event.pageY - 28) + "px")
                     })
