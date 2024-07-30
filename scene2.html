@@ -8,7 +8,13 @@
     </head>
     <body>
         <h1>Gasoline Car Fuel Efficiency in 2017</h1>
-        <p>Scene 2 Content</p>
+        <p>In this scene we explore fuel efficiency in Gasoline cars across various Gasoline car makers.</p>
+        <br/>
+        <p>Similar to the previous scene, we are comparing car maker's fuel efficiencies on the highway and city roads and the average fuel efficiency is measured in Miles per Gallon (MPG).</p>
+
+        <p>In this data set, we have many more gasoline car makers. Notice that in this scene, for gas car makers, the fuel efficiency on the highway is greater than that on city roads for all car makers. This is opposite to what we observed in the previous scene.</p>
+        <p>However, overall gas vehicles seem to offer a lower mileage than electric cars with the maximum average fuel efficiency is for "smart" car manufacturer giving 39 MPG on the highway and 32 MPG on city roads.</p>
+        <p>This chart highlights that while there may be more brands delivering gasoline cars, their models may not be as fuel efficient.</p>
         <div id="scene2"></div>
 
         <button class="button" onclick="window.location.href='scene1.html'">Previous</button>
@@ -109,7 +115,7 @@
                         "translate(" + (width / 2) + " ," +
                         (height + margin.top + 70) + ")")
                     .style("text-anchor", "middle")
-                    .text("Gas Car Make");
+                    .text("Gas Car Maker");
 
                 //Add Y axis label
                 svg.append("text")

@@ -10,7 +10,17 @@
 
 <body>
     <h1>Electric Car Fuel Efficiency in 2017</h1>
-    <p>Scene 1 Content</p>
+    <p>In the first scene, we are examining the fuel efficiency of electric cars by various car makers. We are displaying the average fuel effieiciency for each car maker across their different car model lines. Fuel efficiency is measured in Miles per Gallon (MPG).
+       Notice that there are 2 values plotted for each car maker. This is because each car maker reports the fuel efficiency of its cars on City roads and on the Highway.
+       For electric cars, we see that they offer superb mileage both in the city and on the highway. The best performer is Hyundai electric cars giving ann average of 122 MPG on the highway and 150 MPG in the city. 
+       However, the average fuel efficiency in the city is greater than that on the highway for most electric cars with the exception for Tesla electric cars.
+    </p>
+    <br/>
+    <p>Will this hold true for Gasoline cars as well?</p>
+    <br>
+    <p>You can use the Previous button to navigate to the home page of the visualization.</p>
+    <br/>
+    <p>You can use the Next button to learn more about fuel efficiency in Gasoline cars.</p>
     <div id="scene1"></div>
     <button class="button" onclick="window.location.href='index.html'">Previous</button>
     <button class="button" onclick="window.location.href='scene2.html'">Next</button>
@@ -110,7 +120,7 @@
                     "translate(" + (width / 2) + " ," +
                     (height + margin.top + 70) + ")")
                 .style("text-anchor", "middle")
-                .text("Electric Car Make");
+                .text("Electric Car Maker");
 
             //Add Y axis label
             svg.append("text")
