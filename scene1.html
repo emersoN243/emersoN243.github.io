@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Electric Car Fuel Efficiency</h1>
+    <h1>Electric Car Fuel Efficiency in 2017</h1>
     <p>Scene 1 Content</p>
     <div id="scene1"></div>
     <button onclick="window.location.href='index.html'">Previous</button>
@@ -129,14 +129,23 @@
    
             //Annotations
             // Features of the annotation
+            const type = d3.annotationCustomType(
+                d3.annotationLabel, 
+                {"className":"custom",
+                    "connector":{"end":"arrow",
+                    "type":"curve"},
+                    "note":{"align":"middle",
+                    "orientation":"leftRight",
+                    "lineType":"horizontal"}});
+
             const annotations = [
             {
                 note: {
-                label: "Here is the annotation label",
-                title: "Annotation title"
+                label: "Highway: City:",
+                title: "Max Fuel Effeciency"
                 },
-                x: 100,
-                y: 100,
+                x: 55,
+                y: 75,
                 dy: 100,
                 dx: 100
             }
@@ -146,6 +155,7 @@
             const makeAnnotations = d3.annotation()
             .annotations(annotations)
             svg.append("g")
+            .attr("class", "annotation-group")
             .call(makeAnnotations)
             
         });
