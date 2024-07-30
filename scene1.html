@@ -128,39 +128,42 @@
             svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
    
             //Annotations
-            // Features of the annotation
-            const type = d3.annotationCallout;
-            const annotations = [
+            addAnnotations(svg, "min", meanElectricData[meanElectricData.length-1]);
+            addAnnotations(svg, "max", meanElectricData[0]);
+            
+        });
+
+        function addAnnotations(svg, dataType, data) {
+            var type = d3.annotationCallout;
+            var highwayMPG = data.AverageHighwayMPG;
+            var cityMPG = data.AverageCityMPG;
+            var annotationLabel = "Highway: " + highwayMPG + "/City: " + cityMPG;
+            var annotationTitle = dataType === "min" ? "Min Fuel Efficiency": "Max Fuel Effeciency";
+            var annotationX = dataType === "min" ? width-50: 50;
+            var annotationY = dataType === "min" ? 200: 110;
+            var annotationDX = dataType === "min" ? width+30: 70;
+            var annotationDY = dataType === "min" ? -80: -60;
+
+            var annotations = [
             {
                 note: {
-                label: "Highway: City:",
-                title: "Max Fuel Effeciency"
+                label: annotationLabel,
+                title: annotationTitle
                 },
-                x: 50,
-                y: 110,
-                dy: -60,
-                dx: 70,
+                x: annotationX,
+                y: annotationY,
+                dy: annotationDY,
+                dx: annotationDX,
                 color: "black"
             },
-            {
-                note: {
-                label: "Highway: City:",
-                title: "Min Fuel Effeciency"
-                },
-                x: width-50,
-                y: 200,
-                dy: -80,
-                dx: width-30
-            }
             ]
 
             // Add annotation to the chart
-            const makeAnnotations = d3.annotation().type(type).annotations(annotations);
+            var makeAnnotations = d3.annotation().type(type).annotations(annotations);
             svg.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations);
-            
-        });
+        }
 
         
     </script>
