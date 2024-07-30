@@ -13,7 +13,7 @@ button {
 }
 
 .button:hover {
-    background-color: steelblue; /* Green */
+    background-color: steelblue;
 }
 
 .button:active {
@@ -22,3 +22,11 @@ button {
     transform: translateY(4px);
   }
 
+.tooltip {
+    opacity: 0;
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 10px;
+}

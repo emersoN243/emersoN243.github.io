@@ -12,13 +12,13 @@
     <h1>Explore More</h1>
     <p>Scene 3 Content</p>
 
-    <button id="electricButton">Electric</button>
-    <button id="gasButton">Gasoline</button>
+    <button class="button" id="electricButton">Electric</button>
+    <button class="button" id="gasButton">Gasoline</button>
     
     <div id="scene3"></div>
 
-    <button onclick="window.location.href='scene2.html'">Previous</button>
-    <button onclick="window.location.href='index.html'">Restart visualization</button>
+    <button class="button" onclick="window.location.href='scene2.html'">Previous</button>
+    <button class="button" onclick="window.location.href='index.html'">Restart visualization</button>
     <script>
         //Function to update the chart on clicking button
         function update(chartType) {
@@ -44,6 +44,11 @@
 
             // Parse the Data
             d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
+
+                //Create Tooltip
+                var tooltip = d3.select("#scene3")
+                                .append("div")
+                                .attr("class", "tooltip");
 
                 /// Get the subgroups, AvgHighwayMPG and AvgCityMPG
                 var subgroups = Object.keys(data[0]).slice(3)
@@ -116,7 +121,19 @@
                     .attr("y", function (d) { return y(d.value); })
                     .attr("width", xSubgroup.bandwidth())
                     .attr("height", function (d) { return height - y(d.value); })
-                    .attr("fill", function(d) { return color(d.key); });
+                    .attr("fill", function(d) { return color(d.key); })
+                    .on("mouseover", function(event, d){
+                        tooltip.style('opacity', 0.9)
+                                .style("display", "inline-block");
+                    })
+                    .on("mouseleave", function(event, d){
+                        tooltip.style('opacity', 0);
+                    })
+                    .on("mousemove", function(event, d){
+                        tooltip.html("Car Make: " + d.key + "<br/>Highway MPG: " + d.value)
+                                .style("left", d3.event.pageX + 10 + "px")
+                                .style("top", d3.event.pageY - 25 + "px")
+                    })
 
 
                 //Add X label
