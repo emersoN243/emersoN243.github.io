@@ -14,39 +14,44 @@
     <button id="electricButton">Electric</button>
     <button id="gasButton">Gasoline</button>
     
-    <div id="my_dataviz"></div>
+    <div id="scene3"></div>
 
     <button onclick="window.location.href='scene2.html'">Previous</button>
     <button onclick="window.location.href='index.html'">Restart visualization</button>
     <script>
-        // set the dimensions and margins of the graph
-        const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 1000 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
-
-        // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        // Add X Axis
-        var x = d3.scaleBand()
-                .range([0, width])
-                .padding([0.2])
-        var xAxis = svg.append("g").attr("transform", `translate(0, ${height})`);
-
-        // Add Y axis
-        var y = d3.scaleLinear()
-                    .range([height, 0]);
-        var yAxis = svg.append("g")
-                    .attr("class", "myYaxis")
-
-
         //Function to update the chart on clicking button
         function update(chartType) {
+            //Clear the div
+            d3.select("#scene3").html = "";
+
+            // set the dimensions and margins of the graph
+            const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 1000 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#scene3")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Add X Axis
+            var x = d3.scaleBand()
+                    .range([0, width])
+                    .padding([0.2])
+            var xAxis = svg.append("g").attr("transform", `translate(0, ${height})`);
+
+            // Add Y axis
+            var y = d3.scaleLinear()
+                        .range([height, 0]);
+            var yAxis = svg.append("g")
+                        .attr("class", "myYaxis")
+
             var chartDataFilter = chartType === "Electric" ? "Electricity" : "Gasoline";
             console.log(chartDataFilter)
+
+            var yMax = chartType === "Electric" ? 160 : 45;
+
             // Parse the Data
             d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
@@ -77,42 +82,38 @@
 
                 console.log(subgroups.map(function(key) { return {key: key, value: meanCarData[key]}; }));
 
-                // Update X axis
-                x.domain(groups);
-                xAxis.call(d3.axisBottom(x).tickSizeOuter(0))
+                // Add X axis
+                const x = d3.scaleBand()
+                    .domain(groups)
+                    .range([0, width])
+                    .padding([0.2])
+                svg.append("g")
+                    .attr("transform", `translate(0, ${height})`)
+                    .call(d3.axisBottom(x).tickSizeOuter(0))
                     .selectAll("text")
                     .style("text-anchor", "end")
                     .attr("dx", "-.8em")
                     .attr("dy", ".15em")
                     .attr("transform", "rotate(-65)");
 
-                // Update Y axis
-                y.domain([0, d3.max(meanCarData, function(d) { return d.AverageHighwayMPG}) ]);
-                yAxis.transition().duration(1000).call(d3.axisLeft(y));
+                //Add Y axis
+                const y = d3.scaleLinear()
+                    .domain([0, pageYOffset])
+                    .range([height, 0]);
+                svg.append("g")
+                    .call(d3.axisLeft(y));
 
-                // Another scale for subgroup position?
+                // Add scale for subgroups
                 var xSubgroup = d3.scaleBand()
-                .domain(subgroups)
-                .range([0, x.bandwidth()])
-                .padding([0.05])
+                    .domain(subgroups)
+                    .range([0, x.bandwidth()])
+                    .padding([0.05])
 
                 // color palette = one color per subgroup
                 var color = d3.scaleOrdinal()
                 .domain(subgroups)
                 .range(['orange','steelblue'])
 
-                // Create the u variable
-                var u = svg.selectAll("g")
-                    .data(meanCarData)
-
-                // u.join("rect")
-                //     .transition()
-                //     .duration(1000)
-                //     .attr("x", d => x(d.group))
-                //     .attr("y", d => y(d.value))
-                //     .attr("width", x.bandwidth())
-                //     .attr("height", d => height - y(d.value))
-                //     .attr("fill", "#69b3a2")
 
                 svg.append("g")
                     .selectAll("g")
@@ -129,7 +130,6 @@
                     .attr("height", function (d) { return height - y(d.value); })
                     .attr("fill", function(d) { return color(d.key); });
 
-                svg.selectAll("text").remove()
 
                 svg.append("text")
                     .attr("transform",
@@ -144,17 +144,18 @@
                     .attr("x", 0 - (height / 2))
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
-                    .text("Average MPG");
+                    .text("Average Miles Per Gallon");
                 });
 
-        }
+                //Legend
+                svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange");
+                svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
+                svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
+                svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
 
-        //Legend
-        svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange");
-        svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
-        svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
-        svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
+            }
 
+        
         d3.select("#electricButton").on("click", function() {
             update("Electric");
         });
