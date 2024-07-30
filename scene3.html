@@ -35,17 +35,6 @@
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // Add X Axis
-            var x = d3.scaleBand()
-                    .range([0, width])
-                    .padding([0.2])
-            var xAxis = svg.append("g").attr("transform", `translate(0, ${height})`);
-
-            // Add Y axis
-            var y = d3.scaleLinear()
-                        .range([height, 0]);
-            var yAxis = svg.append("g")
-                        .attr("class", "myYaxis")
 
             var chartDataFilter = chartType === "Electric" ? "Electricity" : "Gasoline";
             console.log(chartDataFilter)
@@ -55,11 +44,11 @@
             // Parse the Data
             d3.csv("https://flunky.github.io/cars2017.csv").then(function (data) {
 
-                // List of subgroups = header of the csv files = soil condition here
+                /// Get the subgroups, AvgHighwayMPG and AvgCityMPG
                 var subgroups = Object.keys(data[0]).slice(3)
                 console.log(subgroups);
 
-                //Get only electric car data in descending order
+                //Get car data in descending order
                 var carData = data.filter(function (d) { return d.Fuel === chartDataFilter });
                 var carGroupedData = d3.group(carData, d => d.Make);
                 var meanCarData = Array.from(carGroupedData, ([key, values]) => {
@@ -78,8 +67,6 @@
                 // List of groups = species here = value of the first column called group -> I show them on the X axis
                 var groups = d3.map(meanCarData, function(d){return(d.key)})
                 console.log(groups);
-
-
                 console.log(subgroups.map(function(key) { return {key: key, value: meanCarData[key]}; }));
 
                 // Add X axis
@@ -98,7 +85,7 @@
 
                 //Add Y axis
                 const y = d3.scaleLinear()
-                    .domain([0, pageYOffset])
+                    .domain([0, yMax])
                     .range([height, 0]);
                 svg.append("g")
                     .call(d3.axisLeft(y));
@@ -131,6 +118,7 @@
                     .attr("fill", function(d) { return color(d.key); });
 
 
+                //Add X label
                 svg.append("text")
                     .attr("transform",
                         "translate(" + (width / 2) + " ," +
@@ -138,6 +126,7 @@
                     .style("text-anchor", "middle")
                     .text( chartType + " Car Make");
 
+                //Add Y Label
                 svg.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", 0 - margin.left)
