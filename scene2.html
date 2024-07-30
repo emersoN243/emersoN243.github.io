@@ -124,7 +124,43 @@
                 svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
                 svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
                 svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
+            
+                //Annotations
+                addAnnotations(svg, "min", meanGasolineData[meanGasolineData.length-1]);
+            
             });
+
+            function addAnnotations(svg, dataType, data) {
+            var type = d3.annotationCallout;
+            var highwayMPG = data.AverageHighwayMPG;
+            var cityMPG = data.AverageCityMPG;
+            var annotationLabel = "Highway:" + highwayMPG + "/City:" + cityMPG;
+            var annotationTitle = dataType === "min" ? "Min": "Max";
+            var annotationX = dataType === "min" ? width-50: 10;
+            var annotationY = dataType === "min" ? 200: 110;
+            var annotationDX = dataType === "min" ? width+30: 70;
+            var annotationDY = dataType === "min" ? -80: -60;
+
+            var annotations = [
+            {
+                note: {
+                label: annotationLabel,
+                title: annotationTitle
+                },
+                x: annotationX,
+                y: annotationY,
+                dy: annotationDY,
+                dx: annotationDX,
+                color: "black"
+            },
+            ]
+
+            // Add annotation to the chart
+            var makeAnnotations = d3.annotation().type(type).annotations(annotations);
+            svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
+        }
 
     
         </script>

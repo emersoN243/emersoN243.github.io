@@ -129,7 +129,7 @@
    
             //Annotations
             addAnnotations(svg, "min", meanElectricData[meanElectricData.length-1]);
-            addAnnotations(svg, "max", meanElectricData[0]);
+            //addAnnotations(svg, "max", meanElectricData[0]);
             
         });
 
@@ -137,8 +137,8 @@
             var type = d3.annotationCallout;
             var highwayMPG = data.AverageHighwayMPG;
             var cityMPG = data.AverageCityMPG;
-            var annotationLabel = "Highway: " + highwayMPG + "/City: " + cityMPG;
-            var annotationTitle = dataType === "min" ? "Min Fuel Efficiency": "Max Fuel Effeciency";
+            var annotationLabel = "Highway:" + highwayMPG + "/City:" + cityMPG;
+            var annotationTitle = dataType === "min" ? "Min": "Max";
             var annotationX = dataType === "min" ? width-50: 50;
             var annotationY = dataType === "min" ? 200: 110;
             var annotationDX = dataType === "min" ? width+30: 70;
