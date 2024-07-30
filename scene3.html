@@ -123,17 +123,19 @@
                     .attr("height", function (d) { return height - y(d.value); })
                     .attr("fill", function(d) { return color(d.key); })
                     .on("mouseover", function(event, d){
-                        tooltip.style('opacity', 0.9)
-                                .style("display", "inline-block");
-                    })
-                    .on("mouseleave", function(event, d){
-                        tooltip.style('opacity', 0);
-                    })
-                    .on("mousemove", function(event, d){
+                        tooltip.transition()
+                            .duration(200)
+                            .style('opacity', 0.9)
                         tooltip.html("Car Make: " + d.key + "<br/>Highway MPG: " + d.value)
                                 .style("left", (event.pageX)+ "px")
-                                .style("top", (event.pageY) + "px")
+                                .style("top", (event.pageY - 28) + "px")
                     })
+                    .on("mouseout", function(event, d){
+                        tooltip.transition()
+                        .duration(500)
+                        .style('opacity', 0);
+                    });
+                    
 
 
                 //Add X label
