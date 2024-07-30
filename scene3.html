@@ -134,15 +134,49 @@
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
                     .text("Average Miles Per Gallon");
-                });
 
-                //Legend
-                svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange");
-                svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
-                svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
-                svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
+                addAnnotations(svg, chartType, meanCarData);
+            });
 
-            }
+            //Legend
+            svg.append("circle").attr("cx",width-80).attr("cy",45).attr("r", 10).style("fill", "orange");
+            svg.append("circle").attr("cx",width-80).attr("cy",75).attr("r", 10).style("fill", "steelblue");
+            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 45).text("Highway").style("font-size", "20px").attr("alignment-baseline","middle");
+            svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
+
+        }
+
+        function addAnnotations(svg, dataType, data) {
+            var type = d3.annotationCallout;
+            var highwayMPG = data.AverageHighwayMPG;
+            var cityMPG = data.AverageCityMPG;
+            var annotationLabel = "Highway:" + highwayMPG + "/City:" + cityMPG;
+            var annotationTitle = "Max";
+            var annotationX = dataType === "Electric" ?  50: 10;
+            var annotationY = dataType === "Electric" ?  110: 110;
+            var annotationDX = dataType === "Electric" ? 70: 70;
+            var annotationDY = dataType === "Electric" ? -60: -60;
+
+            var annotations = [
+            {
+                note: {
+                label: annotationLabel,
+                title: annotationTitle
+                },
+                x: annotationX,
+                y: annotationY,
+                dy: annotationDY,
+                dx: annotationDX,
+                color: "black"
+            },
+            ]
+
+            // Add annotation to the chart
+            var makeAnnotations = d3.annotation().type(type).annotations(annotations);
+            svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
+        }
 
         
         d3.select("#electricButton").on("click", function() {
