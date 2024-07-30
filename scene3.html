@@ -22,7 +22,7 @@
         //Function to update the chart on clicking button
         function update(chartType) {
             //Clear the div
-            d3.select("#scene3").html = "";
+            d3.select("#scene3").selectAll("svg").remove();
 
             // set the dimensions and margins of the graph
             const margin = { top: 10, right: 30, bottom: 110, left: 50 }, width = 1000 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
