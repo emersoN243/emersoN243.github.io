@@ -126,8 +126,8 @@
                 svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
             
                 //Annotations
-                addAnnotations(svg, "min", meanGasolineData[meanGasolineData.length-1]);
-            
+                //addAnnotations(svg, "min", meanGasolineData[meanGasolineData.length-1]);
+                addAnnotations(svg, "max", meanGasolineData[0]);
             });
 
             function addAnnotations(svg, dataType, data) {

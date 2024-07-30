@@ -128,8 +128,8 @@
             svg.append("text").attr("x", width-80+(10*1.5)).attr("y", 75).text("City").style("font-size", "20px").attr("alignment-baseline","middle");
    
             //Annotations
-            addAnnotations(svg, "min", meanElectricData[meanElectricData.length-1]);
-            //addAnnotations(svg, "max", meanElectricData[0]);
+            //addAnnotations(svg, "min", meanElectricData[meanElectricData.length-1]);
+            addAnnotations(svg, "max", meanElectricData[0]);
             
         });
 
